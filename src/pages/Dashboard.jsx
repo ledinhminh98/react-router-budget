@@ -5,7 +5,13 @@ import AddExpenseForm from "../components/AddExpenseForm";
 import BudgetItem from "../components/BudgetItem";
 import Intro from "../components/Intro";
 import Table from "../components/Table";
-import { createBudget, createExpense, fetchData, wait } from "../helpers";
+import {
+  createBudget,
+  createExpense,
+  deleteItem,
+  fetchData,
+  wait,
+} from "../helpers";
 
 export function dashboardLoader() {
   const userName = fetchData("userName");
@@ -24,6 +30,7 @@ export async function dashboardAction({ request }) {
   if (_action === "newUser") {
     try {
       localStorage.setItem("userName", JSON.stringify(values.userName));
+
       return toast.success(`Welcome, ${values.userName}`);
     } catch (error) {
       throw new Error("There was a problem creating your account.");
@@ -49,9 +56,23 @@ export async function dashboardAction({ request }) {
         amount: values.newExpenseAmount,
         budgetId: values.newExpenseBudget,
       });
+
       return toast.success(`Expense ${values.newExpense} created!`);
     } catch (error) {
       throw new Error("There was a problem creating your expense.");
+    }
+  }
+
+  if (_action === "deleteExpense") {
+    try {
+      deleteItem({
+        key: "expenses",
+        id: values.expenseId,
+      });
+
+      return toast.success("Expense deleted!");
+    } catch (error) {
+      throw new Error("There was a problem deleting your expense.");
     }
   }
 }

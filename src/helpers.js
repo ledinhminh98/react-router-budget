@@ -14,7 +14,6 @@ export const fetchData = (key) => {
 export const getAllMatchingItems = ({ category, key, value }) => {
   const data = fetchData(category) ?? [];
 
-  console.log(data);
   return data.filter((item) => item[key] === value);
 };
 
